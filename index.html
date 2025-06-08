@@ -1,32 +1,136 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
   <meta charset="UTF-8">
-  <title>file.d documentation</title>
-  <link rel="icon" type="image/png" href="/file.d/static/file.d.png" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="description" content="A blazing fast tool for building data pipelines: read, process, and output events.">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
+  <title>BankID Demo Åldersändring</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0082ec">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #f2f2f2;
+      font-family: 'Montserrat', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .bankid-container {
+      background: #fff;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+      border-radius: 16px;
+      max-width: 340px;
+      width: 100%;
+      padding: 32px 24px 24px 24px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    .bankid-logo {
+      font-weight: 700;
+      color: #0082ec;
+      font-size: 2rem;
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+    }
+    .bankid-description {
+      color: #333;
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      text-align: left;
+      font-size: 14px;
+      color: #0082ec;
+      font-weight: 600;
+    }
+    input[type="number"], input[type="file"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 18px;
+      border: 1px solid #e4e4e4;
+      border-radius: 6px;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+    .preview-img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 16px;
+      border: 2px solid #0082ec;
+      display: none;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #0082ec;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #005fa3;
+    }
+  </style>
 </head>
 <body>
-  <div id="app"></div>
+  <div class="bankid-container">
+    <div class="bankid-logo">BankID</div>
+    <div class="bankid-description">
+      Välj din ålder och ladda upp en profilbild.
+    </div>
+    <form id="bankid-form">
+      <label for="age">Ålder</label>
+      <input type="number" id="age" name="age" min="0" max="120" required>
+
+      <label for="image">Profilbild</label>
+      <input type="file" id="image" accept="image/*" required>
+      <img id="preview" class="preview-img" alt="Förhandsvisning">
+
+      <button type="submit">Bekräfta</button>
+    </form>
+  </div>
+
   <script>
-    window.$docsify = {
-      name: 'file.d',
-      repo: 'https://github.com/ozontech/file.d',
-      loadSidebar: true,
-      loadNavbar: true,
-      subMaxLevel: 2,
-      maxLevel: 1,
-      coverpage: true,
-      auto2top: true,
-      markdown: {
-        gfm: true
+    // Bildförhandsvisning
+    document.getElementById('image').addEventListener('change', function(event){
+      const file = event.target.files[0];
+      if(file){
+        const reader = new FileReader();
+        reader.onload = function(e){
+          const preview = document.getElementById('preview');
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
       }
+    });
+
+    // Enkel submit
+    document.getElementById('bankid-form').addEventListener('submit', function(e){
+      e.preventDefault();
+      alert("Din ålder och bild är sparad!");
+      // Här kan du lägga till kod för att spara eller skicka datan vidare
+    });
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('service-worker.js');
+      });
     }
   </script>
-  <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
-  <script src="//unpkg.com/docsify-copy-code"></script>
 </body>
 </html>
